@@ -1,0 +1,162 @@
+title Simple Block Pushing Game
+author David Skinner
+homepage www.puzzlescript.net
+verbose_logging
+
+========
+OBJECTS
+========
+
+Background
+lightgreen green
+11111
+11111
+11111
+11111
+11111
+
+water
+blue
+00000
+00000
+00000
+00000
+00000
+
+Player
+black orange brown black
+..1..
+.222.
+12221
+13331
+.3.3.
+
+Boulder
+grey darkgrey lightgray
+.222.
+22000
+00000
+00011
+.111.
+
+RollingBoulder
+grey darkgrey lightgray blue
+.2223
+22000
+00000
+00011
+.111.
+
+SunkBoulder
+grey darkgrey lightgray blue
+.222.
+22000
+00000
+.....
+.....
+
+Rock
+grey darkgrey lightgray
+.222.
+22000
+00000
+00011
+.....
+
+impulse
+pink
+....0
+.....
+.....
+.....
+.....
+
+sinking
+transparent
+
+rolling
+transparent
+
+=======
+LEGEND
+=======
+
+. = Background
+P = Player
+b = Boulder
+o = rock
+~ = Water
+
+obstacle = rock
+sink = water
+
+=======
+SOUNDS
+=======
+
+================
+COLLISIONLAYERS
+================
+
+Background
+Water
+SunkBoulder
+RollingBoulder
+Player
+Boulder
+rock
+impulse
+sinking
+rolling
+
+======
+RULES
+======
+
+( BOULDER )
+
+( BOULDER: ROLLING )
+[ > player | boulder ] -> [ player impulse | Rolling Boulder ]
+
+[ impulse | Rolling Boulder | Boulder ] -> [ | Boulder impulse | Rolling Boulder ] again
+[ impulse | Rolling Boulder | obstacle ] -> [ | Boulder | obstacle ]
+[ impulse | Rolling Boulder | sink ] -> [ | > Boulder | sink ]
+[ impulse | Rolling Boulder | no obstacle ] -> [ | Rolling > Boulder impulse | no obstacle ] again
+
+( this is to resolve collision with map edge )
+[ impulse | Rolling stationary Boulder ] -> [ | Boulder ]
+
+( keep them together )
+[ Rolling > Boulder ] -> [ > Rolling > Boulder ]
+
+( BOULDER: STATES )
+late [ Boulder sink ] -> [ Boulder sinking sink ]
+late [ Boulder sinking ] -> [ SunkBoulder ] 
+
+( ROCK )
+
+[ > player | rock ] -> [ > player | > rock ]
+[ > player | > rock | Boulder ] -> [ player | rock impulse | rolling boulder ] again
+
+( ROCK: STATES )
+late [ rock sink ] -> [ rock sinking sink ]
+late [ rock sinking ] -> [ SunkBoulder ]
+
+==============
+WINCONDITIONS
+==============
+
+=======
+LEVELS
+=======
+
+..........
+..........
+.b..b...o.
+..P...~~..
+.....~~~..
+.b..~~~...
+...~~.....
+..........
+..........
+..........
