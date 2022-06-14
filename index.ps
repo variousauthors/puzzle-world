@@ -1,5 +1,5 @@
-title Simple Block Pushing Game
-author David Skinner
+title Soft Clay
+author Ziggy
 homepage www.puzzlescript.net
 verbose_logging
 run_rules_on_level_start
@@ -9,20 +9,10 @@ OBJECTS
 ========
 
 Background
-lightgreen green
-11111
-11111
-11111
-11111
-11111
+lightgreen
 
-water
-blue
-00000
-00000
-00000
-00000
-00000
+Water
+#ADD8E6
 
 Player
 black orange brown black
@@ -81,6 +71,38 @@ grey darkgrey lightgray
 00011
 .....
 
+Tree
+#44891A brown #54992A #64A93A
+.232.
+02220
+00000
+.111.
+.....
+
+stump
+brown LIGHTBROWN
+.111.
+.111.
+.111.
+.000.
+.....
+
+LogH
+brown lightbrown
+.....
+00000
+00000
+00000
+.....
+
+LogV
+brown lightbrown
+.000.
+.000.
+.000.
+.000.
+.111.
+
 impulse
 pink
 ....0
@@ -92,7 +114,7 @@ pink
 sinking
 transparent
 
-rolling
+impulsed
 transparent
 
 =======
@@ -102,10 +124,12 @@ LEGEND
 . = Background
 P = Player
 b = Boulder
+T = tree
 o = rock
 ~ = Water
 
-obstacle = rock
+obstacle = rock or tree or Boulder
+log = logH or logV
 sink = water
 bridge = ShallowBoulder
 
@@ -124,15 +148,28 @@ ShallowBoulder
 RollingBoulder
 Player
 Boulder
+tree
 rock
+stump
+log
 impulse
 sinking
-rolling
+impulsed
 PlayerTop
 
 ======
 RULES
 ======
+
+( PLAYER )
+
+[ > player | obstacle ] -> [ > player impulse | impulsed obstacle ]
+
+( TREE )
+
+( push it over )
+
+( LOG )
 
 ( WATER )
 [ > player | water no bridge ] -> [ player | water no bridge ]
@@ -140,18 +177,17 @@ RULES
 ( BOULDER )
 
 ( BOULDER: ROLLING )
-[ > player | boulder ] -> [ player impulse | Rolling Boulder ]
-
-[ impulse | Rolling Boulder | Boulder ] -> [ | Boulder impulse | Rolling Boulder ] again
-[ impulse | Rolling Boulder | obstacle ] -> [ | Boulder | obstacle ]
-[ impulse | Rolling Boulder | sink ] -> [ | > Boulder | sink ]
-[ impulse | Rolling Boulder | no obstacle ] -> [ | Rolling > Boulder impulse | no obstacle ] again
+[ impulse | impulsed Boulder | Boulder ] -> [ | Boulder impulse | impulsed Boulder ] again
+[ impulse | impulsed Boulder | obstacle ] -> [ | Boulder | obstacle ]
+[ impulse | impulsed Boulder | sink ] -> [ | > Boulder | sink ]
+[ impulse | impulsed Boulder | no obstacle ] -> [ | impulsed > Boulder impulse | no obstacle ] again
 
 ( this is to resolve collision with map edge )
-[ impulse | Rolling stationary Boulder ] -> [ | Boulder ]
+[ impulse | impulsed stationary Boulder ] -> [ | Boulder ]
+[ > player | stationary Boulder ] -> [ player | Boulder ]
 
 ( keep them together )
-[ Rolling > Boulder ] -> [ > Rolling > Boulder ]
+[ impulsed > Boulder ] -> [ > impulsed > Boulder ]
 
 ( BOULDER: STATES )
 late [ Boulder sink ] -> [ Boulder sinking sink ]
@@ -160,8 +196,14 @@ late [ Boulder sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
 
 ( ROCK )
 
-[ > player | rock ] -> [ > player | > rock ]
-[ > player | > rock | Boulder ] -> [ player | rock impulse | rolling boulder ] again
+( ROCK: PUSHING )
+[ impulse | impulsed rock | Boulder ] -> [ | rock impulse | impulsed Boulder ] again
+[ impulse | impulsed rock | obstacle ] -> [ | rock | obstacle ]
+[ impulse | impulsed rock | sink ] -> [ | > rock | sink ]
+[ impulse | impulsed rock | no obstacle ] -> [ | impulsed > rock | no obstacle ] again
+
+( this is to resolve collision with map edge )
+[ > player | stationary rock ] -> [ player | rock ]
 
 ( ROCK: STATES )
 late [ rock sink ] -> [ rock sinking sink ]
@@ -181,10 +223,10 @@ LEVELS
 =======
 
 ..........
-..........
+......T...
 .b..b...o.
 ..P...~~..
-.....~~~..
+T....~~~..
 .b..~~~...
 ...~~.....
 ..........
