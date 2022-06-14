@@ -161,9 +161,22 @@ PlayerTop
 RULES
 ======
 
+( BUGS )
+( should be able to send object over boulder bridge )
+
 ( PLAYER )
 
 [ > player | obstacle ] -> [ > player impulse | impulsed obstacle ]
+
+[ > player | water no bridge ] -> [ player | water no bridge ]
+
+( PHYSICS )
+
+[ impulse | impulsed obstacle | sink ] -> [ | > obstacle | sink ]
+
+[ impulse | impulsed obstacle | obstacle ] -> [ | obstacle impulse | impulsed obstacle ] again
+
+( OBJECTS )
 
 ( TREE )
 
@@ -171,23 +184,12 @@ RULES
 
 ( LOG )
 
-( WATER )
-[ > player | water no bridge ] -> [ player | water no bridge ]
+( roll them )
 
 ( BOULDER )
 
 ( BOULDER: ROLLING )
-[ impulse | impulsed Boulder | Boulder ] -> [ | Boulder impulse | impulsed Boulder ] again
-[ impulse | impulsed Boulder | obstacle ] -> [ | Boulder | obstacle ]
-[ impulse | impulsed Boulder | sink ] -> [ | > Boulder | sink ]
 [ impulse | impulsed Boulder | no obstacle ] -> [ | impulsed > Boulder impulse | no obstacle ] again
-
-( this is to resolve collision with map edge )
-[ impulse | impulsed stationary Boulder ] -> [ | Boulder ]
-[ > player | stationary Boulder ] -> [ player | Boulder ]
-
-( keep them together )
-[ impulsed > Boulder ] -> [ > impulsed > Boulder ]
 
 ( BOULDER: STATES )
 late [ Boulder sink ] -> [ Boulder sinking sink ]
@@ -197,18 +199,24 @@ late [ Boulder sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
 ( ROCK )
 
 ( ROCK: PUSHING )
-[ impulse | impulsed rock | Boulder ] -> [ | rock impulse | impulsed Boulder ] again
-[ impulse | impulsed rock | obstacle ] -> [ | rock | obstacle ]
-[ impulse | impulsed rock | sink ] -> [ | > rock | sink ]
 [ impulse | impulsed rock | no obstacle ] -> [ | impulsed > rock | no obstacle ] again
-
-( this is to resolve collision with map edge )
-[ > player | stationary rock ] -> [ player | rock ]
 
 ( ROCK: STATES )
 late [ rock sink ] -> [ rock sinking sink ]
 late [ rock sinking no DeepBoulder ] -> [ DeepBoulder ]
 late [ rock sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
+
+( END OBJECTS )
+
+( PHYSICS: AFTER )
+
+( keep the impulsed tag with the moving object )
+[ impulsed > obstacle ] -> [ > impulsed > obstacle ]
+( stop player from moving into obstacles that were blocked )
+[ > player | stationary obstacle ] -> [ player | obstacle ]
+( remove impulse after map edge stops obstacle )
+[ impulse | impulsed stationary obstacle ] -> [ | obstacle ]
+
 
 ( RENDER )
 late up [ no Player | PlayerTop  ] -> [ | ] 
