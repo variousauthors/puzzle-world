@@ -164,7 +164,7 @@ brown
 
 impulse
 pink
-....0
+.....
 .....
 .....
 .....
@@ -175,7 +175,7 @@ transparent
 
 impulsed
 blue
-...0.
+.....
 .....
 .....
 .....
@@ -197,7 +197,7 @@ log = logH or logV or LogUp
 boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
 lightObject = log
 heavyObject = boulder or tree
-solidObject = rock or stump
+solidObject = rock or stump or ShallowBoulder
 obstacle = lightobject or heavyobject or solidobject
 object = lightObject or heavyObject
 sink = water
@@ -248,21 +248,27 @@ RULES
 horizontal [ > player | water no BridgeH ] -> [ player | water ]
 vertical [ > player | water no BridgeV ] -> [ player | water ]
 
+( can's step off bridges wrong )
+horizontal [ > player BridgeV ] -> [ player BridgeV ]
+vertical [ > player BridgeH ] -> [ player BridgeH ]
+
 ( can walk behind rocks lol )
 down [ > player rock ] -> [ player rock ]
 up [ > player | rock ] -> [ player | rock ]
 
 ( PHYSICS )
 
-[ impulse | impulsed object | sink ] -> [ | > object | sink ]
-
 [ impulse | impulsed object | solidobject ] -> [ | object | solidobject ]
+
+[ impulse | impulsed object | sink ] -> [ | > object | sink ]
 
 ( transfering force )
 startloop
+[ > heavyobject | bridge sink ] -> [ > heavyobject | > bridge sink ]
+
 [ impulse | impulsed lightobject | lightobject ] -> [ | lightobject impulse | impulsed lightobject ] again
 
-[ impulse | impulsed heavyobject | lightobject ] -> [ impulse | impulsed heavyobject impulse | impulsed lightobject ] again
+[ impulse | impulsed heavyobject | lightobject ] -> [ | heavyobject impulse | impulsed lightobject ] again
 
 [ impulse | impulsed heavyobject | heavyobject ] -> [ | heavyobject impulse | impulsed heavyobject ] again
 endloop
@@ -365,7 +371,6 @@ late vertical [ impulse | impulsed BoulderB ] -> [ impulse | impulsed BoulderC ]
 
 late [ BoulderM ] -> [ BoulderB ]
 
-
 ==============
 WINCONDITIONS
 ==============
@@ -377,10 +382,10 @@ LEVELS
 ..........
 ...T..T...
 .b..b...o.
-..P...~~..
-T....~~~..
-.b..~~~...
+..P...~~~~
+T....~~~~~
+.b..~~..b.
 ...~~.....
-..........
-..........
-..........
+.~~~....T.
+~~~..T....
+~~~.....o.
