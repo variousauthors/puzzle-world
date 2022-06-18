@@ -260,7 +260,7 @@ up [ > player | rock ] -> [ player | rock ]
 
 [ impulse | impulsed object | solidobject ] -> [ | object | solidobject ]
 
-[ impulse | impulsed object | sink ] -> [ | > object | sink ]
+([ impulse | impulsed object | sink ] -> [ | > object | sink ])
 
 ( transfering force )
 startloop
@@ -292,6 +292,10 @@ vertical [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogH impuls
 horizontal [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogV impulse | no obstacle ] again
 
 ( stand them up )
+( exception: shove into water )
+horizontal [ impulse | impulsed LogH | no obstacle sink ] -> [ | impulsed > LogH | no obstacle sink ]
+vertical [ impulse | impulsed LogV | no obstacle sink ] -> [ | impulsed > LogV | no obstacle sink ]
+
 horizontal [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
 vertical [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
 
