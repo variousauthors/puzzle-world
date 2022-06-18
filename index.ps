@@ -130,6 +130,22 @@ brown lightbrown
 .000.
 .111.
 
+LogUpTop
+brown lightbrown
+.....
+.....
+.....
+.111.
+.111.
+
+LogUp
+brown lightbrown
+.111.
+.000.
+.000.
+.000.
+.....
+
 impulse
 pink
 .....
@@ -155,9 +171,10 @@ T = tree
 o = rock
 ~ = Water
 
+log = logH or logV or LogUp
 boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
-obstacle = rock or tree or Boulder
-log = logH or logV
+obstacle = tree or Boulder or Log
+solid = rock or stump
 sink = water
 bridge = ShallowBoulder
 
@@ -173,17 +190,18 @@ Background
 Water
 DeepBoulder
 ShallowBoulder
+stump
 Player
 Boulder
 tree
 rock
-stump
 log
 impulse
 sinking
 impulsed
 PlayerTop
 TreeTop
+LogUpTop
 
 ======
 RULES
@@ -201,9 +219,15 @@ RULES
 
 [ > player | obstacle ] -> [ > player impulse | impulsed obstacle ]
 
+( can walk behind rocks lol )
+down [ > player rock ] -> [ player rock ]
+up [ > player | rock ] -> [ player | rock ]
+
 ( PHYSICS )
 
 [ impulse | impulsed obstacle | sink ] -> [ | > obstacle | sink ]
+
+[ impulse | impulsed obstacle | solid ] -> [ | obstacle | solid ]
 
 [ impulse | impulsed obstacle | obstacle ] -> [ | obstacle impulse | impulsed obstacle ] again
 
@@ -212,10 +236,22 @@ RULES
 ( TREE )
 
 ( push it over )
+horizontal [ impulse | impulsed Tree | no obstacle ] -> [ | stump impulsed > LogH | no obstacle ]
+vertical [ impulse | impulsed Tree | no obstacle ] -> [ | stump impulsed > LogV | no obstacle ]
 
 ( LOG )
 
+( push it over )
+horizontal [ impulse | impulsed LogUp | no obstacle ] -> [ | impulsed > LogH | no obstacle ]
+vertical [ impulse | impulsed LogUp | no obstacle ] -> [ | impulsed > LogV | no obstacle ]
+
 ( roll them )
+vertical [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogH impulse | no obstacle ] again
+horizontal [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogV impulse | no obstacle ] again
+
+( stand them up )
+horizontal [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
+vertical [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
 
 ( BOULDER )
 
@@ -255,6 +291,9 @@ late up [ Player | no PlayerTop  ] -> [ Player | PlayerTop ]
 
 late up [ no Tree | TreeTop  ] -> [ | ] 
 late up [ Tree | no TreeTop  ] -> [ Tree | TreeTop ] 
+
+late up [ no LogUp | LogUpTop  ] -> [ | ] 
+late up [ LogUp | no LogUpTop  ] -> [ LogUp | LogUpTop ] 
 
 ( ROLLING BOULDER )
 late right [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderM ]
