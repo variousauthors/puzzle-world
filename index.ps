@@ -146,9 +146,25 @@ brown lightbrown
 .000.
 .....
 
+BridgeH
+brown
+.....
+00000
+00000
+00000
+.....
+
+BridgeV
+brown
+.000.
+.000.
+.000.
+.000.
+.000.
+
 impulse
 pink
-.....
+....0
 .....
 .....
 .....
@@ -158,7 +174,12 @@ sinking
 transparent
 
 impulsed
-transparent
+blue
+...0.
+.....
+.....
+.....
+.....
 
 =======
 LEGEND
@@ -171,12 +192,15 @@ T = tree
 o = rock
 ~ = Water
 
+bridge = BridgeH or BridgeV
 log = logH or logV or LogUp
 boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
-obstacle = tree or Boulder or Log
-solid = rock or stump
+lightObject = log
+heavyObject = boulder or tree
+solidObject = rock or stump
+obstacle = lightobject or heavyobject or solidobject
+object = lightObject or heavyObject
 sink = water
-bridge = ShallowBoulder
 
 =======
 SOUNDS
@@ -191,6 +215,7 @@ Water
 DeepBoulder
 ShallowBoulder
 stump
+BridgeH, BridgeV
 Player
 Boulder
 tree
@@ -217,7 +242,11 @@ RULES
 
 ( PLAYER )
 
-[ > player | obstacle ] -> [ > player impulse | impulsed obstacle ]
+[ > player | object ] -> [ > player impulse | impulsed object ]
+
+( can walk over bridges )
+horizontal [ > player | water no BridgeH ] -> [ player | water ]
+vertical [ > player | water no BridgeV ] -> [ player | water ]
 
 ( can walk behind rocks lol )
 down [ > player rock ] -> [ player rock ]
@@ -225,11 +254,18 @@ up [ > player | rock ] -> [ player | rock ]
 
 ( PHYSICS )
 
-[ impulse | impulsed obstacle | sink ] -> [ | > obstacle | sink ]
+[ impulse | impulsed object | sink ] -> [ | > object | sink ]
 
-[ impulse | impulsed obstacle | solid ] -> [ | obstacle | solid ]
+[ impulse | impulsed object | solidobject ] -> [ | object | solidobject ]
 
-[ impulse | impulsed obstacle | obstacle ] -> [ | obstacle impulse | impulsed obstacle ] again
+( transfering force )
+startloop
+[ impulse | impulsed lightobject | lightobject ] -> [ | lightobject impulse | impulsed lightobject ] again
+
+[ impulse | impulsed heavyobject | lightobject ] -> [ impulse | impulsed heavyobject impulse | impulsed lightobject ] again
+
+[ impulse | impulsed heavyobject | heavyobject ] -> [ | heavyobject impulse | impulsed heavyobject ] again
+endloop
 
 ( OBJECTS )
 
@@ -252,6 +288,14 @@ horizontal [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogV impu
 ( stand them up )
 horizontal [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
 vertical [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogUp | no obstacle ]
+
+( exception: put them back on the stump )
+horizontal [ > player | logH | stump ] -> [ > player | > LogUp | stump ]
+vertical [ > player | logV | stump ] -> [ > player | > LogUp | stump ]
+
+( LOG: STATES )
+late [ LogH sink ] -> [ BridgeH sink ]
+late [ LogV sink ] -> [ BridgeV sink ]
 
 ( BOULDER )
 
@@ -278,11 +322,13 @@ late [ rock sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
 ( PHYSICS: AFTER )
 
 ( keep the impulsed tag with the moving object )
-[ impulsed > obstacle ] -> [ > impulsed > obstacle ]
+[ impulsed > object ] -> [ > impulsed > object ]
 ( stop player from moving into obstacles that were blocked )
-[ > player | stationary obstacle ] -> [ player | obstacle ]
+[ > player | stationary object ] -> [ player | object ]
 ( remove impulse after map edge stops obstacle )
-[ impulse | impulsed stationary obstacle ] -> [ | obstacle ]
+[ impulse | impulsed stationary object ] -> [ | object ]
+( remove impulse after pushing a rock or knocking over a tree )
+[ impulsed stationary object ] -> [ object ]
 
 
 ( RENDER )
@@ -329,7 +375,7 @@ LEVELS
 =======
 
 ..........
-......T...
+...T..T...
 .b..b...o.
 ..P...~~..
 T....~~~..
