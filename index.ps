@@ -31,21 +31,40 @@ black orange brown black
 .222.
 
 ( TODO implement a rolling animation )
-Boulder
-grey darkgrey lightgray
-.220.
-22200
+BoulderA
+grey darkgrey lightgray lightgreen green darkgreen
+.432.
+42200
 02000
 10001
 .111.
 
-RollingBoulder
-grey darkgrey lightgray blue
-.2223
-22000
-00000
-00011
+BoulderB
+grey darkgrey lightgray lightgreen green darkgreen
+.224.
+22204
+02004
+10001
 .111.
+
+BoulderC
+grey darkgrey lightgray lightgreen green darkgreen
+.220.
+22200
+02000
+10005
+.155.
+
+BoulderD
+grey darkgrey lightgray lightgreen green darkgreen
+.220.
+22200
+42000
+50001
+.511.
+
+BoulderM
+transparent
 
 DeepBoulder
 black darkblue blue
@@ -64,10 +83,10 @@ grey darkgrey lightgray
 .....
 
 Rock
-grey darkgrey lightgray
-.222.
-22000
-00000
+grey darkgrey lightgray lightgreen green darkgreen
+.232.
+23004
+00040
 00011
 .....
 
@@ -105,7 +124,7 @@ brown lightbrown
 
 impulse
 pink
-....0
+.....
 .....
 .....
 .....
@@ -123,11 +142,12 @@ LEGEND
 
 . = Background
 P = Player
-b = Boulder
+b = BoulderA
 T = tree
 o = rock
 ~ = Water
 
+boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
 obstacle = rock or tree or Boulder
 log = logH or logV
 sink = water
@@ -145,7 +165,6 @@ Background
 Water
 DeepBoulder
 ShallowBoulder
-RollingBoulder
 Player
 Boulder
 tree
@@ -160,6 +179,10 @@ PlayerTop
 ======
 RULES
 ======
+
+( TODO )
+( no walking over rock bridge, only sending objects )
+( add trees )
 
 ( BUGS )
 ( should be able to send object over boulder bridge )
@@ -221,6 +244,31 @@ late [ rock sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
 ( RENDER )
 late up [ no Player | PlayerTop  ] -> [ | ] 
 late up [ Player | no PlayerTop  ] -> [ Player | PlayerTop ] 
+
+( ROLLING BOULDER )
+late right [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderM ]
+late right [ impulse | impulsed BoulderC ] -> [ impulse | impulsed BoulderD ]
+late right [ impulse | impulsed BoulderB ] -> [ impulse | impulsed BoulderC ]
+late right [ impulse | impulsed BoulderA ] -> [ impulse | impulsed BoulderB ]
+
+late left [ impulse | impulsed BoulderB ] -> [ impulse | impulsed BoulderM ]
+late left [ impulse | impulsed BoulderC ] -> [ impulse | impulsed BoulderB ]
+late left [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderC ]
+late left [ impulse | impulsed BoulderA ] -> [ impulse | impulsed BoulderD ]
+
+late [ BoulderM ] -> [ BoulderA ]
+
+( ROLLING VERTICAL )
+late vertical [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderM ]
+late vertical [ impulse | impulsed BoulderA ] -> [ impulse | impulsed BoulderD ]
+
+late [ BoulderM ] -> [ BoulderA ]
+
+late vertical [ impulse | impulsed BoulderC ] -> [ impulse | impulsed BoulderM ]
+late vertical [ impulse | impulsed BoulderB ] -> [ impulse | impulsed BoulderC ]
+
+late [ BoulderM ] -> [ BoulderB ]
+
 
 ==============
 WINCONDITIONS
