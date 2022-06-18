@@ -32,7 +32,7 @@ black orange brown black
 
 ( TODO implement a rolling animation )
 BoulderA
-grey darkgrey lightgray lightgreen green darkgreen
+grey darkgrey lightgray lightgreen #64A93A darkgreen
 .432.
 42200
 02000
@@ -40,7 +40,7 @@ grey darkgrey lightgray lightgreen green darkgreen
 .111.
 
 BoulderB
-grey darkgrey lightgray lightgreen green darkgreen
+grey darkgrey lightgray lightgreen #64A93A darkgreen
 .224.
 22204
 02004
@@ -48,7 +48,7 @@ grey darkgrey lightgray lightgreen green darkgreen
 .111.
 
 BoulderC
-grey darkgrey lightgray lightgreen green darkgreen
+grey darkgrey lightgray lightgreen #64A93A darkgreen
 .220.
 22200
 02000
@@ -56,7 +56,7 @@ grey darkgrey lightgray lightgreen green darkgreen
 .155.
 
 BoulderD
-grey darkgrey lightgray lightgreen green darkgreen
+grey darkgrey lightgray lightgreen #64A93A darkgreen
 .220.
 22200
 42000
@@ -83,11 +83,11 @@ grey darkgrey lightgray
 .....
 
 Rock
-grey darkgrey lightgray lightgreen green darkgreen
-.232.
-23004
-00040
-00011
+grey darkgrey lightgray lightgreen #64A93A darkgreen
+.432.
+42200
+02000
+10011
 .....
 
 Tree
@@ -97,6 +97,14 @@ Tree
 00000
 .111.
 .....
+
+TreeTop
+#44891A brown #54992A #64A93A
+.....
+.....
+.....
+.....
+..3..
 
 stump
 brown LIGHTBROWN
@@ -175,14 +183,16 @@ impulse
 sinking
 impulsed
 PlayerTop
+TreeTop
 
 ======
 RULES
 ======
 
 ( TODO )
-( no walking over rock bridge, only sending objects )
 ( add trees )
+( no walking over rock bridge, only sending objects )
+
 
 ( BUGS )
 ( should be able to send object over boulder bridge )
@@ -190,8 +200,6 @@ RULES
 ( PLAYER )
 
 [ > player | obstacle ] -> [ > player impulse | impulsed obstacle ]
-
-[ > player | water no bridge ] -> [ player | water no bridge ]
 
 ( PHYSICS )
 
@@ -244,6 +252,9 @@ late [ rock sinking DeepBoulder ] -> [ DeepBoulder ShallowBoulder ]
 ( RENDER )
 late up [ no Player | PlayerTop  ] -> [ | ] 
 late up [ Player | no PlayerTop  ] -> [ Player | PlayerTop ] 
+
+late up [ no Tree | TreeTop  ] -> [ | ] 
+late up [ Tree | no TreeTop  ] -> [ Tree | TreeTop ] 
 
 ( ROLLING BOULDER )
 late right [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderM ]
