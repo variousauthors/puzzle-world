@@ -311,8 +311,8 @@ horizontal [ > player | logH | stump ] -> [ > player | > LogUp | stump ]
 vertical [ > player | logV | stump ] -> [ > player | > LogUp | stump ]
 
 ( LOG: STATES )
-late [ LogH sink ] -> [ BridgeH sink ]
-late [ LogV sink ] -> [ BridgeV sink ]
+late [ LogH sink no BridgeV ] -> [ BridgeH sink ]
+late [ LogV sink no BridgeH ] -> [ BridgeV sink ]
 
 ( BOULDER )
 
@@ -388,7 +388,7 @@ LEVELS
 #...T..T...#
 #.b..b...o.#
 #..P...~~~~#
-#T....~~~~~#
+#T.T..~~~~~#
 #.b..~~..b.#
 #...~~.....#
 #.~~~....T.#
