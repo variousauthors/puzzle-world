@@ -242,12 +242,32 @@ RULES
 ======
 
 ( TODO )
-( add trees )
-( no walking over rock bridge, only sending objects )
 
+( boulder should have an iregular shape like )
+( ...xx )
+( .xxxx )
+( xxxxx )
+( xxxxx )
+( .xxx. )
+( so that it can only roll until it gets to that sharp corner )
+( then this shape can be used to decide how logs react )
+
+( OR )
+
+( logs are like )
+( .xxx. )
+( .xxx. )
+( .xxx. )
+( xxxx. ) ( <-- this )
+( .xxx. )
+( which decides how they roll in water )
+( could add a little "hop" to the rolling animation lol )
+
+( boulder rolling onto a log bridge should move the bridge somehow )
+( log rolling onto same orientation log bridge should do something )
+  ( in either case I like the idea of the bridge trying to move away )
 
 ( BUGS )
-( should be able to send object over boulder bridge )
 
 ( PLAYER )
 
@@ -320,6 +340,7 @@ late [ LogV sink no BridgeH ] -> [ BridgeV sink ]
 [ impulse | impulsed Boulder | no obstacle ] -> [ | impulsed > Boulder impulse | no obstacle ] again
 
 ( BOULDER: STATES )
+
 late [ Boulder sink ] -> [ Boulder sinking sink ]
 late [ Boulder sinking ] -> [ ShallowBoulder ] 
 
