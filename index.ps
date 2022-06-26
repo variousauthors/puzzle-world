@@ -114,7 +114,31 @@ brown LIGHTBROWN
 .000.
 .....
 
-LogH
+LogHA
+brown lightbrown
+.0...
+00000
+00000
+00000
+.....
+
+LogHB
+brown lightbrown
+.....
+00000
+01000
+00000
+.....
+
+LogHC
+brown lightbrown
+.....
+00000
+00000
+00000
+.0...
+
+LogHD
 brown lightbrown
 .....
 00000
@@ -122,7 +146,31 @@ brown lightbrown
 00000
 .....
 
-LogV
+LogVA
+brown lightbrown
+.000.
+.0000
+.000.
+.000.
+.111.
+
+LogVB
+brown lightbrown
+.000.
+.010.
+.000.
+.000.
+.111.
+
+LogVC
+brown lightbrown
+.000.
+0000.
+.000.
+.000.
+.111.
+
+LogVD
 brown lightbrown
 .000.
 .000.
@@ -146,7 +194,31 @@ brown lightbrown
 .000.
 .....
 
-BridgeH
+BridgeHA
+brown
+.0...
+00000
+00000
+00000
+.....
+
+BridgeHB
+brown lightbrown
+.....
+00000
+01000
+00000
+.....
+
+BridgeHC
+brown
+.....
+00000
+00000
+00000
+.0...
+
+BridgeHD
 brown
 .....
 00000
@@ -154,7 +226,31 @@ brown
 00000
 .....
 
-BridgeV
+BridgeVA
+brown
+.000.
+.0000
+.000.
+.000.
+.000.
+
+BridgeVB
+brown lightbrown
+.000.
+.010.
+.000.
+.000.
+.000.
+
+BridgeVC
+brown
+.000.
+0000.
+.000.
+.000.
+.000.
+
+BridgeVD
 brown
 .000.
 .000.
@@ -201,7 +297,11 @@ o = rock
 ~ = Water
 # = border
 
+bridgeV = BridgeVA or BridgeVB or BridgeVC or BridgeVD
+bridgeH = BridgeHA or BridgeHB or BridgeHC or BridgeHD
 bridge = BridgeH or BridgeV
+logH = logHA or LogHB or LogHC or LogHD
+logV = logVA or LogVB or LogVC or LogVD
 log = logH or logV or LogUp
 boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
 lightObject = log
@@ -243,29 +343,8 @@ RULES
 
 ( TODO )
 
-( boulder should have an iregular shape like )
-( ...xx )
-( .xxxx )
-( xxxxx )
-( xxxxx )
-( .xxx. )
-( so that it can only roll until it gets to that sharp corner )
-( then this shape can be used to decide how logs react )
-
-( OR )
-
-( logs are like )
-( .xxx. )
-( .xxx. )
-( .xxx. )
-( xxxx. ) ( <-- this )
-( .xxx. )
-( which decides how they roll in water )
-( could add a little "hop" to the rolling animation lol )
-
-( boulder rolling onto a log bridge should move the bridge somehow )
-( log rolling onto same orientation log bridge should do something )
-  ( in either case I like the idea of the bridge trying to move away )
+( boulder rolling onto log )
+  ( tries to roll the log away from the knob )
 
 ( BUGS )
 
@@ -305,14 +384,14 @@ endloop
 ( TREE )
 
 ( push it over )
-horizontal [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogH | no obstacle ]
-vertical [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogV | no obstacle ]
+horizontal [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
+vertical [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVA | no obstacle ]
 
 ( LOG )
 
 ( push it over )
-horizontal [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogH | no obstacle ]
-vertical [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogV | no obstacle ]
+horizontal [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogHA | no obstacle ]
+vertical [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogVA | no obstacle ]
 
 ( roll them )
 vertical [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogH impulse | no obstacle ] again
@@ -330,9 +409,60 @@ vertical [ impulse | impulsed LogV | no obstacle ] -> [ | > LogUp | no obstacle 
 horizontal [ > player | logH | stump ] -> [ > player | > LogUp | stump ]
 vertical [ > player | logV | stump ] -> [ > player | > LogUp | stump ]
 
+( LOG: HORIZONTAL LOG ROLLING  )
+late down [ impulse | impulsed LogHD ] -> [ impulse | impulsed BoulderM ]
+late down [ impulse | impulsed LogHC ] -> [ impulse | impulsed LogHD ]
+late down [ impulse | impulsed LogHB ] -> [ impulse | impulsed LogHC ]
+late down [ impulse | impulsed LogHA ] -> [ impulse | impulsed LogHB ]
+
+late up [ impulse | impulsed LogHB ] -> [ impulse | impulsed BoulderM ]
+late up [ impulse | impulsed LogHC ] -> [ impulse | impulsed LogHB ]
+late up [ impulse | impulsed LogHD ] -> [ impulse | impulsed LogHC ]
+late up [ impulse | impulsed LogHA ] -> [ impulse | impulsed LogHD ]
+
+late [ BoulderM ] -> [ LogHA ]
+
+( LOG: VERTICAL LOG ROLLING  )
+late left [ impulse | impulsed LogVD ] -> [ impulse | impulsed BoulderM ]
+late left [ impulse | impulsed LogVC ] -> [ impulse | impulsed LogVD ]
+late left [ impulse | impulsed LogVB ] -> [ impulse | impulsed LogVC ]
+late left [ impulse | impulsed LogVA ] -> [ impulse | impulsed LogVB ]
+
+late right [ impulse | impulsed LogVB ] -> [ impulse | impulsed BoulderM ]
+late right [ impulse | impulsed LogVC ] -> [ impulse | impulsed LogVB ]
+late right [ impulse | impulsed LogVD ] -> [ impulse | impulsed LogVC ]
+late right [ impulse | impulsed LogVA ] -> [ impulse | impulsed LogVD ]
+
+late [ BoulderM ] -> [ LogVA ]
+
 ( LOG: STATES )
-late [ LogH sink no BridgeV ] -> [ BridgeH sink ]
-late [ LogV sink no BridgeH ] -> [ BridgeV sink ]
+late [ LogHA sink no BridgeV ] -> [ BridgeHA sink ]
+late [ LogHB sink no BridgeV ] -> [ BridgeHB sink ]
+late [ LogHC sink no BridgeV ] -> [ BridgeHC sink ]
+late [ LogHD sink no BridgeV ] -> [ BridgeHD sink ]
+
+( the log then settles into one of two states because logs don't float that way )
+late down [ impulse | impulsed bridgeHB ] -> [ impulse | impulsed BridgeHC ]
+late up [ impulse | impulsed bridgeHB ] -> [ impulse | impulsed BridgeHA ]
+
+late down [ impulse | impulsed bridgeHD ] -> [ impulse| impulsed BridgeHA ]
+late up [ impulse | impulsed bridgeHD ] -> [ impulse | impulsed BridgeHC ]
+
+late [ LogVA sink no BridgeH ] -> [ BridgeVA sink ]
+late [ LogVB sink no BridgeH ] -> [ BridgeVB sink ]
+late [ LogVC sink no BridgeH ] -> [ BridgeVC sink ]
+late [ LogVD sink no BridgeH ] -> [ BridgeVD sink ]
+
+( the log then settles into one of two states because logs don't float that way )
+late left [ impulse | impulsed bridgeVB ] -> [ impulse | impulsed BridgeVC ]
+late right [ impulse | impulsed bridgeVB ] -> [ impulse | impulsed BridgeVA ]
+
+late left [ impulse | impulsed bridgeVD ] -> [ impulse| impulsed BridgeVA ]
+late right [ impulse | impulsed bridgeVD ] -> [ impulse | impulsed BridgeVC ]
+
+( the log then settles into one of two states because logs don't float that way )
+late [ bridgeVB ] -> [ BridgeVA ]
+late [ bridgeVD ] -> [ BridgeVC ]
 
 ( BOULDER )
 
@@ -372,7 +502,7 @@ late up [ Tree | no TreeTop  ] -> [ Tree | TreeTop ]
 late up [ no LogUp | LogUpTop  ] -> [ | ] 
 late up [ LogUp | no LogUpTop  ] -> [ LogUp | LogUpTop ] 
 
-( ROLLING BOULDER )
+( ROLLING BOULDER HORIZONTAL )
 late right [ impulse | impulsed BoulderD ] -> [ impulse | impulsed BoulderM ]
 late right [ impulse | impulsed BoulderC ] -> [ impulse | impulsed BoulderD ]
 late right [ impulse | impulsed BoulderB ] -> [ impulse | impulsed BoulderC ]
@@ -408,11 +538,11 @@ LEVELS
 #..........#
 #...T..T...#
 #.b..b...o.#
-#..P...~~~~#
-#T.T..~~~~~#
-#.b..~~..b.#
-#...~~.....#
+#......~~~~#
+#T....~~~~~#
+#.T..~~..b.#
+#..~~~~....#
 #.~~~....T.#
 #~~~..T....#
-#~~~.....o.#
+#~~~...P.o.#
 ############
