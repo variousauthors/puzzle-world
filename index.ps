@@ -116,7 +116,7 @@ brown LIGHTBROWN
 
 LogHA
 brown lightbrown
-.0...
+..0..
 00000
 00000
 00000
@@ -126,7 +126,7 @@ LogHB
 brown lightbrown
 .....
 00000
-01000
+00100
 00000
 .....
 
@@ -136,7 +136,7 @@ brown lightbrown
 00000
 00000
 00000
-.0...
+..0..
 
 LogHD
 brown lightbrown
@@ -149,24 +149,24 @@ brown lightbrown
 LogVA
 brown lightbrown
 .000.
-.0000
 .000.
+.0000
 .000.
 .111.
 
 LogVB
 brown lightbrown
 .000.
-.010.
 .000.
+.010.
 .000.
 .111.
 
 LogVC
 brown lightbrown
 .000.
-0000.
 .000.
+0000.
 .000.
 .111.
 
@@ -196,7 +196,7 @@ brown lightbrown
 
 BridgeHA
 brown
-.0...
+..0..
 00000
 00000
 00000
@@ -206,7 +206,7 @@ BridgeHB
 brown lightbrown
 .....
 00000
-01000
+00100
 00000
 .....
 
@@ -216,7 +216,7 @@ brown
 00000
 00000
 00000
-.0...
+..0..
 
 BridgeHD
 brown
@@ -229,24 +229,24 @@ brown
 BridgeVA
 brown
 .000.
-.0000
 .000.
+.0000
 .000.
 .000.
 
 BridgeVB
 brown lightbrown
 .000.
-.010.
 .000.
+.010.
 .000.
 .000.
 
 BridgeVC
 brown
 .000.
-0000.
 .000.
+0000.
 .000.
 .000.
 
@@ -384,8 +384,10 @@ endloop
 ( TREE )
 
 ( push it over )
-horizontal [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
-vertical [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVA | no obstacle ]
+left [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
+right [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
+up [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVD | no obstacle ]
+down [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVB | no obstacle ]
 
 ( LOG )
 
