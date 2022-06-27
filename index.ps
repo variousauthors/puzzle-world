@@ -107,7 +107,7 @@ TreeTop
 ..3..
 
 stump
-brown LIGHTBROWN
+brown lightbrown #9f581e #a86f24 #b47e27
 .111.
 .111.
 .111.
@@ -115,71 +115,71 @@ brown LIGHTBROWN
 .....
 
 LogHA
-brown lightbrown
-..0..
+brown lightbrown #9f581e #a86f24 #b47e27
+..2..
 00000
 00000
 00000
 .....
 
 LogHB
-brown lightbrown
-.....
+brown lightbrown #9f581e #a86f24 #b47e27
+..4..
+00300
 00000
-00100
 00000
 .....
 
 LogHC
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .....
 00000
 00000
-00000
-..0..
+00300
+..4..
 
 LogHD
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .....
 00000
 00000
 00000
-.....
+..2..
 
 LogVA
-brown lightbrown
+#A46422 lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.0000
+.0002
 .000.
 .111.
 
 LogVB
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.010.
+.0034
 .000.
 .111.
 
 LogVC
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-0000.
+4300.
 .000.
 .111.
 
 LogVD
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.000.
+2000.
 .000.
 .111.
 
 LogUpTop
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .....
 .....
 .....
@@ -187,98 +187,98 @@ brown lightbrown
 .111.
 
 LogUpA
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .111.
-.000.
+2000.
 .000.
 .000.
 .....
 
 LogUpB
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .111.
+4300.
 .000.
-.010.
 .000.
 .....
 
 LogUpC
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .111.
+.0002
 .000.
-.0000
 .000.
 .....
 
 LogUpD
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .111.
+.0034
 .000.
-0000.
 .000.
 .....
 
 BridgeHA
-brown
-..0..
+brown lightbrown #9f581e #a86f24 #b47e27
+..2..
 00000
 00000
 00000
 .....
 
 BridgeHB
-brown lightbrown
-.....
+brown lightbrown #9f581e #a86f24 #b47e27
+..4..
+00300
 00000
-00100
 00000
 .....
 
 BridgeHC
-brown
+brown lightbrown #9f581e #a86f24 #b47e27
 .....
 00000
 00000
-00000
-..0..
+00300
+..4..
 
 BridgeHD
-brown
+brown lightbrown #9f581e #a86f24 #b47e27
 .....
 00000
 00000
 00000
-.....
+..2..
 
 BridgeVA
-brown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.0000
+.0002
 .000.
 .000.
 
 BridgeVB
-brown lightbrown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.010.
+.0034
 .000.
 .000.
 
 BridgeVC
-brown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-0000.
+4300.
 .000.
 .000.
 
 BridgeVD
-brown
+brown lightbrown #9f581e #a86f24 #b47e27
 .000.
 .000.
-.000.
+2000.
 .000.
 .000.
 
@@ -410,11 +410,11 @@ endloop
 
 ( TREE )
 
-( push it over )
+( push it over, behaves like logUpA )
 left [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
-right [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHA | no obstacle ]
+right [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogHB | no obstacle ]
 up [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVD | no obstacle ]
-down [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVB | no obstacle ]
+down [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVC | no obstacle ]
 
 ( LOG )
 
@@ -424,20 +424,20 @@ left [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogHC | no obstacle ]
 left [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogHB | no obstacle ]
 left [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogHD | no obstacle ]
 
-right [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogHA | no obstacle ]
+right [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogHB | no obstacle ]
 right [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogHC | no obstacle ]
-right [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogHD | no obstacle ]
-right [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogHB | no obstacle ]
+right [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogHA | no obstacle ]
+right [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogHD | no obstacle ]
 
 up [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogVD | no obstacle ]
-up [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogVB | no obstacle ]
+up [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogVC | no obstacle ]
 up [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogVA | no obstacle ]
-up [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVC | no obstacle ]
+up [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVB | no obstacle ]
 
-down [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogVB | no obstacle ]
+down [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogVC | no obstacle ]
 down [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogVD | no obstacle ]
-down [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogVA | no obstacle ]
-down [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVC | no obstacle ]
+down [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogVB | no obstacle ]
+down [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVA | no obstacle ]
 
 ( roll them )
 vertical [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogH impulse | no obstacle ] again
@@ -448,45 +448,45 @@ horizontal [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogV impu
 horizontal [ impulse | impulsed LogH | no obstacle sink ] -> [ | > LogH | no obstacle sink ]
 vertical [ impulse | impulsed LogV | no obstacle sink ] -> [ | > LogV | no obstacle sink ]
 
-left [ impulse | impulsed LogHA | no obstacle ] -> [ | > LogUpA | no obstacle ]
-left [ impulse | impulsed LogHB | no obstacle ] -> [ | > LogUpD | no obstacle ]
+left [ impulse | impulsed LogHA | no obstacle ] -> [ | > LogUpC | no obstacle ]
+left [ impulse | impulsed LogHB | no obstacle ] -> [ | > LogUpA | no obstacle ]
 left [ impulse | impulsed LogHC | no obstacle ] -> [ | > LogUpB | no obstacle ]
-left [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpC | no obstacle ]
+left [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpD | no obstacle ]
 
 right [ impulse | impulsed LogHA | no obstacle ] -> [ | > LogUpA | no obstacle ]
 right [ impulse | impulsed LogHB | no obstacle ] -> [ | > LogUpC | no obstacle ]
-right [ impulse | impulsed LogHC | no obstacle ] -> [ | > LogUpB | no obstacle ]
-right [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpD | no obstacle ]
+right [ impulse | impulsed LogHC | no obstacle ] -> [ | > LogUpD | no obstacle ]
+right [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpB | no obstacle ]
 
-up [ impulse | impulsed LogVA | no obstacle ] -> [ | > LogUpC | no obstacle ]
-up [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpA | no obstacle ]
-up [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpD | no obstacle ]
+up [ impulse | impulsed LogVA | no obstacle ] -> [ | > LogUpD | no obstacle ]
+up [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpC | no obstacle ]
+up [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpA | no obstacle ]
 up [ impulse | impulsed LogVD | no obstacle ] -> [ | > LogUpB | no obstacle ]
 
 down [ impulse | impulsed LogVA | no obstacle ] -> [ | > LogUpC | no obstacle ]
-down [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpB | no obstacle ]
-down [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpD | no obstacle ]
+down [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpD | no obstacle ]
+down [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpB | no obstacle ]
 down [ impulse | impulsed LogVD | no obstacle ] -> [ | > LogUpA | no obstacle ]
 
 ( exception: put them back on the stump )
-left [ > player | logHA | stump ] -> [ > player | > LogUpA | stump ]
-left [ > player | logHB | stump ] -> [ > player | > LogUpD | stump ]
+left [ > player | logHA | stump ] -> [ > player | > LogUpC | stump ]
+left [ > player | logHB | stump ] -> [ > player | > LogUpA | stump ]
 left [ > player | logHC | stump ] -> [ > player | > LogUpB | stump ]
-left [ > player | logHD | stump ] -> [ > player | > LogUpC | stump ]
+left [ > player | logHD | stump ] -> [ > player | > LogUpD | stump ]
 
 right [ > player | logHA | stump ] -> [ > player | > LogUpA | stump ]
 right [ > player | logHB | stump ] -> [ > player | > LogUpC | stump ]
-right [ > player | logHC | stump ] -> [ > player | > LogUpB | stump ]
-right [ > player | logHD | stump ] -> [ > player | > LogUpD | stump ]
+right [ > player | logHC | stump ] -> [ > player | > LogUpD | stump ]
+right [ > player | logHD | stump ] -> [ > player | > LogUpB | stump ]
 
-up [ > player | logVA | stump ] -> [ > player | > LogUpC | stump ]
-up [ > player | logVB | stump ] -> [ > player | > LogUpA | stump ]
-up [ > player | logVC | stump ] -> [ > player | > LogUpD | stump ]
+up [ > player | logVA | stump ] -> [ > player | > LogUpD | stump ]
+up [ > player | logVB | stump ] -> [ > player | > LogUpC | stump ]
+up [ > player | logVC | stump ] -> [ > player | > LogUpA | stump ]
 up [ > player | logVD | stump ] -> [ > player | > LogUpB | stump ]
 
 down [ > player | logVA | stump ] -> [ > player | > LogUpC | stump ]
-down [ > player | logVB | stump ] -> [ > player | > LogUpB | stump ]
-down [ > player | logVC | stump ] -> [ > player | > LogUpD | stump ]
+down [ > player | logVB | stump ] -> [ > player | > LogUpD | stump ]
+down [ > player | logVC | stump ] -> [ > player | > LogUpB | stump ]
 down [ > player | logVD | stump ] -> [ > player | > LogUpA | stump ]
 
 
