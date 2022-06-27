@@ -186,11 +186,35 @@ brown lightbrown
 .111.
 .111.
 
-LogUp
+LogUpA
 brown lightbrown
 .111.
 .000.
 .000.
+.000.
+.....
+
+LogUpB
+brown lightbrown
+.111.
+.000.
+.010.
+.000.
+.....
+
+LogUpC
+brown lightbrown
+.111.
+.000.
+.0000
+.000.
+.....
+
+LogUpD
+brown lightbrown
+.111.
+.000.
+0000.
 .000.
 .....
 
@@ -302,6 +326,7 @@ bridgeH = BridgeHA or BridgeHB or BridgeHC or BridgeHD
 bridge = BridgeH or BridgeV
 logH = logHA or LogHB or LogHC or LogHD
 logV = logVA or LogVB or LogVC or LogVD
+logUp = LogUpA or LogUpB or LogUpC or LogUpD
 log = logH or logV or LogUp
 boulder = boulderA or BoulderB or BoulderC or BoulderD or BoulderM
 lightObject = log
@@ -348,6 +373,8 @@ RULES
 
 ( BUGS )
 
+( push standing log into water, log does not resolve into knob log )
+
 ( PLAYER )
 
 [ > player | object ] -> [ > player impulse | impulsed object ]
@@ -392,8 +419,25 @@ down [ impulse | impulsed Tree | no obstacle ] -> [ | stump > LogVB | no obstacl
 ( LOG )
 
 ( push it over )
-horizontal [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogHA | no obstacle ]
-vertical [ impulse | impulsed LogUp | no obstacle ] -> [ | > LogVA | no obstacle ]
+left [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogHA | no obstacle ]
+left [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogHC | no obstacle ]
+left [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogHB | no obstacle ]
+left [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogHD | no obstacle ]
+
+right [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogHA | no obstacle ]
+right [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogHC | no obstacle ]
+right [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogHD | no obstacle ]
+right [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogHB | no obstacle ]
+
+up [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogVD | no obstacle ]
+up [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogVB | no obstacle ]
+up [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogVA | no obstacle ]
+up [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVC | no obstacle ]
+
+down [ impulse | impulsed LogUpA | no obstacle ] -> [ | > LogVB | no obstacle ]
+down [ impulse | impulsed LogUpB | no obstacle ] -> [ | > LogVD | no obstacle ]
+down [ impulse | impulsed LogUpC | no obstacle ] -> [ | > LogVA | no obstacle ]
+down [ impulse | impulsed LogUpD | no obstacle ] -> [ | > LogVC | no obstacle ]
 
 ( roll them )
 vertical [ impulse | impulsed LogH | no obstacle ] -> [ | impulsed > LogH impulse | no obstacle ] again
@@ -404,12 +448,49 @@ horizontal [ impulse | impulsed LogV | no obstacle ] -> [ | impulsed > LogV impu
 horizontal [ impulse | impulsed LogH | no obstacle sink ] -> [ | > LogH | no obstacle sink ]
 vertical [ impulse | impulsed LogV | no obstacle sink ] -> [ | > LogV | no obstacle sink ]
 
-horizontal [ impulse | impulsed LogH | no obstacle ] -> [ | > LogUp | no obstacle ]
-vertical [ impulse | impulsed LogV | no obstacle ] -> [ | > LogUp | no obstacle ]
+left [ impulse | impulsed LogHA | no obstacle ] -> [ | > LogUpA | no obstacle ]
+left [ impulse | impulsed LogHB | no obstacle ] -> [ | > LogUpD | no obstacle ]
+left [ impulse | impulsed LogHC | no obstacle ] -> [ | > LogUpB | no obstacle ]
+left [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpC | no obstacle ]
+
+right [ impulse | impulsed LogHA | no obstacle ] -> [ | > LogUpA | no obstacle ]
+right [ impulse | impulsed LogHB | no obstacle ] -> [ | > LogUpC | no obstacle ]
+right [ impulse | impulsed LogHC | no obstacle ] -> [ | > LogUpB | no obstacle ]
+right [ impulse | impulsed LogHD | no obstacle ] -> [ | > LogUpD | no obstacle ]
+
+up [ impulse | impulsed LogVA | no obstacle ] -> [ | > LogUpC | no obstacle ]
+up [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpA | no obstacle ]
+up [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpD | no obstacle ]
+up [ impulse | impulsed LogVD | no obstacle ] -> [ | > LogUpB | no obstacle ]
+
+down [ impulse | impulsed LogVA | no obstacle ] -> [ | > LogUpC | no obstacle ]
+down [ impulse | impulsed LogVB | no obstacle ] -> [ | > LogUpB | no obstacle ]
+down [ impulse | impulsed LogVC | no obstacle ] -> [ | > LogUpD | no obstacle ]
+down [ impulse | impulsed LogVD | no obstacle ] -> [ | > LogUpA | no obstacle ]
 
 ( exception: put them back on the stump )
-horizontal [ > player | logH | stump ] -> [ > player | > LogUp | stump ]
-vertical [ > player | logV | stump ] -> [ > player | > LogUp | stump ]
+left [ > player | logHA | stump ] -> [ > player | > LogUpA | stump ]
+left [ > player | logHB | stump ] -> [ > player | > LogUpD | stump ]
+left [ > player | logHC | stump ] -> [ > player | > LogUpB | stump ]
+left [ > player | logHD | stump ] -> [ > player | > LogUpC | stump ]
+
+right [ > player | logHA | stump ] -> [ > player | > LogUpA | stump ]
+right [ > player | logHB | stump ] -> [ > player | > LogUpC | stump ]
+right [ > player | logHC | stump ] -> [ > player | > LogUpB | stump ]
+right [ > player | logHD | stump ] -> [ > player | > LogUpD | stump ]
+
+up [ > player | logVA | stump ] -> [ > player | > LogUpC | stump ]
+up [ > player | logVB | stump ] -> [ > player | > LogUpA | stump ]
+up [ > player | logVC | stump ] -> [ > player | > LogUpD | stump ]
+up [ > player | logVD | stump ] -> [ > player | > LogUpB | stump ]
+
+down [ > player | logVA | stump ] -> [ > player | > LogUpC | stump ]
+down [ > player | logVB | stump ] -> [ > player | > LogUpB | stump ]
+down [ > player | logVC | stump ] -> [ > player | > LogUpD | stump ]
+down [ > player | logVD | stump ] -> [ > player | > LogUpA | stump ]
+
+
+( vertical [ > player | logV | stump ] -> [ > player | > LogUp | stump ] )
 
 ( LOG: HORIZONTAL LOG ROLLING  )
 late down [ impulse | impulsed LogHD ] -> [ impulse | impulsed BoulderM ]
@@ -540,11 +621,11 @@ LEVELS
 #..........#
 #...T..T...#
 #.b..b...o.#
-#......~~~~#
-#T....~~~~~#
+#.P....~~~~#
+#.....~~~~~#
 #.T..~~..b.#
-#..~~~~....#
+#...~~~....#
 #.~~~....T.#
 #~~~..T....#
-#~~~...P.o.#
+#~~~.....o.#
 ############
